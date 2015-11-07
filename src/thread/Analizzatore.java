@@ -8,11 +8,20 @@ import util.Out;
 public class Analizzatore extends Thread{
 	Questionario quest;
 	private String result;
+	Questionario esas, ctcae;
+	
+	public Analizzatore(Questionario esas, Questionario ctcae){
+		super("Analizzatore");
+		this.esas = esas;
+		this.ctcae = ctcae;
+		this.result = "";
+	}
 	
 	public Analizzatore(Questionario quest){
 		super("Analizzatore");
 		this.quest = quest;
-		result = "";
+		valutaQuestionario();
+		this.result = "";
 	}
 	
 	public String getResult(){
@@ -20,26 +29,27 @@ public class Analizzatore extends Thread{
 	}
 	
 	public void run(){
-		Out.println("L'analizzatore per il questionario " + quest.getClass().getSimpleName() + " si è avviato");
-		this.result = valutaQuestionario();
+		Out.println("L'analizzatore  si è avviato");
+		Analizzatore analizzatore_esas = new Analizzatore(esas);
+		Analizzatore analizzatore_ctcae = new Analizzatore(ctcae);
+		this.result = analizzatore_esas.getResult() + analizzatore_ctcae.getResult();
 	}
 	
-	public String valutaQuestionario(){
+	public void valutaQuestionario(){
 		Out.println("Valutazione del questionario " + quest.getClass().getSimpleName() + " in corso");
         String attr;
         Integer value;
-        boolean result = true;
         for(Map.Entry<String,Integer> element:quest.getMap().entrySet()){
             attr = element.getKey();
             value = (int)element.getValue();
             if(value >= quest.getValoreAllarmante()){
-            	String messaggio = "Questionario " + quest.getClass().getSimpleName() + " allarmanete\n";
+            	String messaggio = "Il questionario " + quest.getClass().getSimpleName() + " è allarmante. ";
             	Out.println(messaggio);
-            	return messaggio;
+            	this.result =  messaggio;
+            	return;
             }
         }
         
-		return "";
 	}
 
 }

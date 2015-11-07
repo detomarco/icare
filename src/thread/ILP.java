@@ -9,14 +9,12 @@ import util.Out;
 public class ILP extends Thread{
 	private Questionario esas;
 	private Questionario ctcae;
-	private StringBuilder questionario;
 	private Messaggio messaggio;
 	
 	public ILP() {
 		super("ILP");
 		esas = new ESAS();
 		ctcae = new CTCAE();
-		this.questionario = new StringBuilder ();
 	}
 	
 	public void run() {
