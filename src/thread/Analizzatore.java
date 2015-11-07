@@ -2,20 +2,20 @@ package thread;
 
 import java.util.Map;
 
-import questionario.Questionario;
+import classes.Questionario;
 import util.Out;
 
 public class Analizzatore extends Thread{
 	Questionario quest;
-	private boolean result;
+	private String result;
 	
 	public Analizzatore(Questionario quest){
 		super("Analizzatore");
 		this.quest = quest;
-		result = true;
+		result = "";
 	}
 	
-	public boolean getResult(){
+	public String getResult(){
 		return this.result;
 	}
 	
@@ -24,9 +24,8 @@ public class Analizzatore extends Thread{
 		this.result = valutaQuestionario();
 	}
 	
-	public boolean valutaQuestionario(){
+	public String valutaQuestionario(){
 		Out.println("Valutazione del questionario " + quest.getClass().getSimpleName() + " in corso");
-		
         String attr;
         Integer value;
         boolean result = true;
@@ -34,11 +33,13 @@ public class Analizzatore extends Thread{
             attr = element.getKey();
             value = (int)element.getValue();
             if(value >= quest.getValoreAllarmante()){
-            	Out.println("Questionario " + quest.getClass().getSimpleName() + " allarmanete\n");
-            	result = false;
-            	break;
+            	String messaggio = "Questionario " + quest.getClass().getSimpleName() + " allarmanete\n";
+            	Out.println(messaggio);
+            	return messaggio;
             }
         }
-		return result;
+        
+		return "";
 	}
+
 }

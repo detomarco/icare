@@ -12,9 +12,10 @@ import java.util.Iterator;
 
 import org.json.JSONObject;
 
-import questionario.CTCAE;
-import questionario.ESAS;
-import questionario.Questionario;
+import classes.Alert;
+import classes.CTCAE;
+import classes.ESAS;
+import classes.Questionario;
 import util.Out;
 
 public class Core extends Thread{
@@ -35,18 +36,21 @@ public class Core extends Thread{
 	}
 	
 	public void gestioneQuestionario(){
-		
-		ILP ilp = new ILP();
-		ilp.start();
+		// Avvio dell'interfaccia lato medico
+			ILM ilm = new ILM();
+			ilm.start();
+		// Avvio dell'interfaccia lato paziente
+			ILP ilp = new ILP();
+			ilp.start();
 		try {
 			// Aspetta che l'ILP termini la sua esecuzione
 			ilp.join();
 		} catch (InterruptedException e) { }
 		
-		// Ricezione del questionario in formato json
+		// Ricezione dei questionari in formato json
 		String questionario = ilp.riceviQuestionario();
 		
-		// Gestione della stringa json per la ricreazione degli oggetti riferiti ai due questionari
+		// Gestione della stringa json per l'istanziazzione dei due oggetti questionari
 			JSONObject json  = new JSONObject(questionario);
 			Questionario esas = new ESAS();
 			Questionario ctcae = new CTCAE();
@@ -83,15 +87,33 @@ public class Core extends Thread{
 				analizzatore_esas.join();
 				analizzatore_ctcae.join();
 		} catch (InterruptedException e) { }
+	
 		
-		// Se uno dei due questionari è allarmante
-		if(!analizzatore_esas.getResult() || !analizzatore_ctcae.getResult()){
+		// Recupero del risultato delle analisi, con relativa descrizione in caso di criticità
+			String result_esas = analizzatore_esas.getResult();
+			String result_ctcae = analizzatore_ctcae.getResult();
+		
+		// Generazione della descrizione dei risultati
+		String descrizione = result_esas + result_ctcae;
+		
+		// Se è presente una descrizione, allora è stata rilevata una criticità
+		if(!descrizione.equals("")){
 			// Allarmare il medico
-			Out.println("Situazione del paziente allarmanete, avvisare il medico");
+				Out.println("Situazione del paziente allarmanete.");
+				Out.wait("Invio dell'alert all'interfaccia lato medico in corso");
+				// Creazione dell'oggetto alert
+				Alert alert = new Alert(esas, ctcae, descrizione);
+				ilm.inviaAlert(alert);
 		}else{
+			
 			// Notificare il paziente
-			Out.println("Situazione del paziente rassicurante, notificarlo al paziente");
+				Out.wait("Situazione del paziente rassicurante, notificarlo al paziente");
+				descrizione = "Complimenti, i questionari hanno ottenuto esito positivo.";
+				ilp.inviaNotifica(descrizione);
 		}
+		
+		
+		
 			
 	}
 	

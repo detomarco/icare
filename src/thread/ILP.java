@@ -1,8 +1,8 @@
 package thread;
 
-import questionario.CTCAE;
-import questionario.ESAS;
-import questionario.Questionario;
+import classes.CTCAE;
+import classes.ESAS;
+import classes.Questionario;
 import util.Messaggio;
 import util.Out;
 
@@ -23,7 +23,7 @@ public class ILP extends Thread{
 		Out.println("L'interfaccia lato paziente si è avviata");
 		messaggio = new Messaggio();
 		
-		Sender sender = new Sender(messaggio);
+		Paziente sender = new Paziente(messaggio);
 		sender.start();
 		
 		try {
@@ -36,5 +36,9 @@ public class ILP extends Thread{
 
 	public String riceviQuestionario(){
 		return messaggio.get().toString();
+	}
+	
+	public void inviaNotifica(String descrizione){
+		// TO DO
 	}
 }

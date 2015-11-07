@@ -1,6 +1,6 @@
 package util;
 
-import questionario.Questionario;
+import classes.Questionario;
 
 public class Messaggio {
 	private String content;

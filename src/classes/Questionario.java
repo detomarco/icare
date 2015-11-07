@@ -1,4 +1,4 @@
-package questionario;
+package classes;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
