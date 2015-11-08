@@ -28,7 +28,7 @@ public class Paziente extends Thread{
 		in.nextLine();
 		
 		/* QUESTIONARIO ESAS */
-			Out.println("-------------------------------------------------------------------------------------");
+			Out.div();
 			Out.println("Questionario ESAS: indica la gravità del sintomo con dei numeri che vanno da 0 a 10");
 			
 			// Per ogni domanda del questionario ESAS
@@ -39,7 +39,7 @@ public class Paziente extends Thread{
 				do{
 					try{
 						// Mostra domanda
-						Out.println(label);
+						Out.print(label + ": ");
 						// Recupera valore dalla console
 						value = Integer.parseInt(in.nextLine());
 					}catch(NumberFormatException ex){
@@ -53,10 +53,10 @@ public class Paziente extends Thread{
 				esas.putValue(label, value);
 	        }
 			
-			Out.println("Il questionario ESAS è concluso: passiamo ora a quello CTCAE\n");
-		
+			Out.println("Il questionario ESAS è concluso: passiamo ora a quello CTCAE");
+			
 		/* QUESTIONARIO CTCAE */
-			Out.println("-------------------------------------------------------------------------------------");
+			Out.div();
 			Out.println("Questionario CTCAE: indica la gravità del sintomo con dei numeri che vanno da 0 a 4\n");
 			
 			// Per ogni domanda del questionario CTCAE
@@ -67,7 +67,7 @@ public class Paziente extends Thread{
 				do{
 					try{
 						// Mostra domanda
-						Out.println(label);
+						Out.print(label + ": ");
 						// Recupera valore dalla console
 						value = Integer.parseInt(in.nextLine());
 					}catch(NumberFormatException ex){
@@ -82,15 +82,17 @@ public class Paziente extends Thread{
 	        }
 			
 			Out.println("Il questionario CTCAE è concluso: la compilazione dei questionari si è conclusa.");
-			Out.println("-------------------------------------------------------------------------------------\n");
+			Out.div();
 		
 			in.close();
 			
 			// Simulazione di invio dei questionari
-				Out.wait("Invio dei questionari in corso.......");
+				Out.wait("Invio dei questionari in corso");
 				
 			
-				Out.println("Questionario inviato, ti invieremo una notifica appena verrano valutati\n");
+				Out.println("Questionario inviato, ti invieremo una notifica appena verrano valutati");
+			
+			Out.div();
 			
 			// Invio dei questionari
 			this.inviaQuestionari(esas, ctcae);

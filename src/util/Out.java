@@ -2,6 +2,7 @@ package util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 public class Out {
 	
@@ -16,10 +17,12 @@ public class Out {
 	}
 	
 	public static void wait(Object o){
-		Out.println(o.toString());
-		try { Thread.sleep(1000); } catch (InterruptedException e) { }
-
-		
+		Out.println(o.toString() + "..........");
+		try { Thread.sleep(new Random().nextInt(3000)); } catch (InterruptedException e) { }
+	}
+	
+	public static void div(){
+		System.out.println("\n-------------------------------------------------------------------------------------\n");
 	}
 	
 }

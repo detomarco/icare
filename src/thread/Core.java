@@ -1,7 +1,9 @@
-/*
- * 	Per la parte implementativa, viene richiesto al team GIMFA di gestire solo la parte relativa ai questionari: 
- * 	dalla loro compilazione, alla loro analisi con eventuale notifica al paziente o alert al medico 
- * 
+
+
+
+ /* 	
+  	Per la parte implementativa, viene richiesto al team GIMFA di gestire solo la parte relativa ai questionari: 
+  	dalla loro compilazione, alla loro analisi con eventuale notifica al paziente o alert al medico e storage nel db
  */
 
 
@@ -22,21 +24,20 @@ public class Core extends Thread{
 	
 	public Core() {
 		super("Core");
-		start();
 	}
 	
 	public static void main(String[] args) {
 		Core core = new Core();
-		try {
-			core.join();
-		} catch (InterruptedException e) { }
-		System.out.println("------------------");
-		System.out.println("Fine simulazione");
-		System.out.println("------------------");
+		core.start();
+//		try {
+//			core.join();
+//			core.sleep(6000);
+//		} catch (InterruptedException e) { }
+//		
+//		System.out.print("\n----------------------------------------\n           Fine simulazione\n----------------------------------------");
 	}
 	
 	public void run() {
-		new Analizzatore(new ESAS());
 		Out.println("Il core si è avviato");
 		this.gestioneQuestionario();
 	}
@@ -48,8 +49,7 @@ public class Core extends Thread{
 		// Avvio dell'interfaccia lato paziente
 			ILP ilp = new ILP();
 			ilp.start();
-		
-	
+
 		// Attendi la ricezione del questionario
 		String questionario = ilp.riceviQuestionario();
 		
@@ -91,24 +91,24 @@ public class Core extends Thread{
 				analizzatore_ctcae.join();
 		} catch (InterruptedException e) { }
 		
-		System.out.println("");
+		Out.println("Analisi dei questionari terminata");
+		Out.div();
 		// Recupero del risultato delle analisi, con relativa descrizione in caso di criticità
-			String result_esas = analizzatore_esas.getResult();
-			String result_ctcae = analizzatore_ctcae.getResult();
+			String result_esas = analizzatore_esas.getDescrizione();
+			String result_ctcae = analizzatore_ctcae.getDescrizione();
 		
 		// Generazione della descrizione dei risultati
 		String descrizione = result_esas + result_ctcae;
 		
 		// Avvio dell'interfaccia al database
-			IDB idb = new IDB(questionario);
+			IDB idb = new IDB(questionario, descrizione);
 			idb.start();
-		
-		
+			
 		// Se è presente una descrizione, allora è stata rilevata una criticità
-		if(!descrizione.equals("")){
+		if(!analizzatore_esas.getResult() || !analizzatore_ctcae.getResult()){
 			// Allarmare il medico
 				Out.println("Situazione del paziente allarmante.");
-				Out.wait("Invio dell'alert all'interfaccia lato medico in corso.......");
+				Out.wait("Invio dell'alert all'interfaccia lato medico in corso");
 			// Creazione dell'oggetto alert
 				Alert alert = new Alert(questionario, descrizione);
 				ilm.inviaAlert(alert);
@@ -116,14 +116,11 @@ public class Core extends Thread{
 			
 			// Notificare il paziente
 				Out.wait("Situazione del paziente rassicurante, notificarlo al paziente");
-				descrizione = "Complimenti, i questionari hanno ottenuto esito positivo.";
 				ilp.inviaNotifica(descrizione);
 		}
 		
+		Out.div();
 		
-		
-			
 	}
 	
-
 }
