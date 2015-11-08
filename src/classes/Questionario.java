@@ -8,8 +8,6 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import util.Out;
-
 public class Questionario {
 	private String id;
 	protected Date date;
@@ -55,13 +53,8 @@ public class Questionario {
 
 	public static String toJSON(Questionario esas, Questionario ctcae){
 		JSONObject json = new JSONObject();
-		JSONObject esas_json = new JSONObject();
-		JSONObject ctcae_json = new JSONObject();
-
 		json.put("esas", esas.toJSON());
-
 		json.put("ctcae", ctcae.toJSON());
-
 		return json.toString();
 	}
 	

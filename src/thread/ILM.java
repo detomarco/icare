@@ -17,7 +17,7 @@ public class ILM extends Thread{
 
 	public void run() {
 		Out.println("L'interfaccia lato medico si è avviata");
-		Out.wait("Invio dell'alert all'interfaccia lato medico in corso");
+		Out.wait("Invio dell'alert al medico in corso");
 		// Creazione dell'oggetto alert
 		inviaAlert();
 	}

@@ -26,7 +26,6 @@ public class IDB extends Thread{
 		JSONObject json = new JSONObject(questionario);
 		json.put("descrizione", descrizione);
 		
-		Out.println("Elaborazione ed inserimento del seguente risultato: ");
-		Out.println(json.toString());
+		Out.println("Elaborazione ed inserimento del seguente risultato: " + json.toString());
 	}
 }

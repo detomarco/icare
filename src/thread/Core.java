@@ -1,13 +1,11 @@
 
- /* 	
+ /** SPECIFICHE DELLA PARTE IMPLEMENTATIVA
   	Per la parte implementativa, viene richiesto al team GIMFA di gestire solo la parte relativa ai questionari: 
   	dalla loro compilazione, alla loro analisi con eventuale notifica al paziente o alert al medico e storage nel db
  */
 
 
 package thread;
-
-import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -57,7 +55,7 @@ public class Core extends Thread{
 				esas.putArray(esas_fields);
 				esas.setId(json.getJSONObject("esas").get("id").toString());
 				
-				// Creazione dell'oggetto esas
+			// Creazione dell'oggetto ctcae
 				JSONArray ctcae_json  = json.getJSONObject("ctcae").getJSONArray("fields");
 				int[] ctcae_fields = new int[ctcae_json.length()];
 				for (int i = 0, size = ctcae_json.length(); i < size; i++){
@@ -66,36 +64,18 @@ public class Core extends Thread{
 				ctcae.putArray(ctcae_fields);
 				ctcae.setId(json.getJSONObject("esas").get("id").toString());
 			
-		// Avvio del thread per analizzare il questionario ESAS
-			Valutazione valutazione_esas = new Valutazione(esas);
-			valutazione_esas.start();
-		// Avvio del thread per analizzare il questionario CTCAE
-			Valutazione valutazione_ctcae = new Valutazione(ctcae);
-			valutazione_ctcae.start();
-
-		try {
-			// Attendere la fine delle analisi
-				valutazione_esas.join();
-				valutazione_ctcae.join();
-		} catch (InterruptedException e) { }
-		
+		String descrizione = Valutazione.valutaQuestionario(esas, ctcae);
 		Out.println("Analisi dei questionari terminata");
 		Out.div();
-		// Recupero del risultato delle analisi, con relativa descrizione in caso di criticità
-			String result_esas = valutazione_esas.getDescrizione();
-			String result_ctcae = valutazione_ctcae.getDescrizione();
-		
-		// Generazione della descrizione dei risultati
-		String descrizione = result_esas + result_ctcae;
-		
+
 		// Avvio dell'interfaccia al database
 			IDB idb = new IDB(questionario, descrizione);
 			idb.start();
 			
 		// Se è presente una descrizione, allora è stata rilevata una criticità
-		if(!valutazione_esas.getResult() || !valutazione_ctcae.getResult()){
+		if(descrizione.indexOf("allarmante") >= 0){
 			// Allarmare il medico
-				Out.println("Situazione del paziente allarmante.");
+				Out.println("Condizione del paziente allarmante.");
 				Alert alert = new Alert(questionario, descrizione);
 			// Avvio dell'interfaccia lato medico
 				ILM ilm = new ILM(alert);
@@ -104,7 +84,8 @@ public class Core extends Thread{
 		}else{
 			
 			// Notificare il paziente
-				Out.wait("Situazione del paziente rassicurante, notificarlo al paziente");
+				Out.println("Condizione del paziente rassicurante");
+				Out.wait("Invio della notifica al paziente");
 				ilp.inviaNotifica(descrizione);
 		}
 		
