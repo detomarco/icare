@@ -30,6 +30,7 @@ public class Core extends Thread{
 	}
 	
 	public void run() {
+		new Analizzatore(new ESAS());
 		Out.println("Il core si è avviato");
 		this.gestioneQuestionario();
 	}
@@ -75,23 +76,31 @@ public class Core extends Thread{
 				ctcae.setId(json.getJSONObject("ctcae").get("id").toString());
 			
 		// Avvio del thread per analizzare il questionario ESAS
-			Analizzatore analizzatore = new Analizzatore(esas, ctcae);
-			analizzatore.start();
+			Analizzatore analizzatore_esas = new Analizzatore(esas);
+			analizzatore_esas.start();
+		// Avvio del thread per analizzare il questionario CTCAE
+			Analizzatore analizzatore_ctcae = new Analizzatore(ctcae);
+			analizzatore_ctcae.start();
 
 		try {
 			// Attendere la fine delle analisi
-			analizzatore.join();
+				analizzatore_esas.join();
+				analizzatore_ctcae.join();
 		} catch (InterruptedException e) { }
 	
 		
 		// Recupero del risultato delle analisi, con relativa descrizione in caso di criticità
-		String descrizione = analizzatore.getResult();
+			String result_esas = analizzatore_esas.getResult();
+			String result_ctcae = analizzatore_ctcae.getResult();
+		
+		// Generazione della descrizione dei risultati
+		String descrizione = result_esas + result_ctcae;
 		
 		// Se è presente una descrizione, allora è stata rilevata una criticità
 		if(!descrizione.equals("")){
 			// Allarmare il medico
 				Out.println("Situazione del paziente allarmante.");
-				Out.wait("Invio dell'alert medico attraverso l'interfaccia in corso");
+				Out.wait("Invio dell'alert all'interfaccia lato medico in corso");
 				// Creazione dell'oggetto alert
 				Alert alert = new Alert(questionario, descrizione);
 				ilm.inviaAlert(alert);

@@ -7,8 +7,6 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
-import util.Out;
-
 public class Questionario {
 	private String id;
 	protected Date date;
@@ -19,8 +17,6 @@ public class Questionario {
 		return valoreAllarmante;
 	}
 
-	private boolean empty = true; 
-	
 	public Questionario(int valoreAllarmante) {
 		this.id = this.generateId();
 		this.valoreAllarmante = valoreAllarmante;

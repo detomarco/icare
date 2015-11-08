@@ -1,6 +1,5 @@
 package thread;
 
-import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -26,7 +25,7 @@ public class Paziente extends Thread{
 		Scanner in = new Scanner(System.in);
 		Out.println("Ciao Walter, è arrivato il momento di compilare i nuovi questionari.");
 		Out.println("Premi invio per iniziare");
-		String input = in.nextLine();
+		in.nextLine();
 		
 		/* QUESTIONARIO ESAS */
 			Out.println("-------------------------------------------------------------------------------------");
@@ -99,7 +98,7 @@ public class Paziente extends Thread{
 	}
 	
 	public void inviaQuestionari(Questionario esas, Questionario ctcae){
-		this.messaggio.put(esas, ctcae);
+		this.messaggio.put(Questionario.toJSON(esas, ctcae));
 	}
 	
 

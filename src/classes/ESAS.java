@@ -26,7 +26,7 @@ public class ESAS extends Questionario{
 		super(7);
 		// Inizializzazione della map
 		data = new HashMap<>();
-		for(String label: this.quests ){
+		for(String label: ESAS.quests ){
 			this.data.put(label, new Integer(-1));
 		}
 	}

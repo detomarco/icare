@@ -4,7 +4,6 @@
 package classes;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Marco
@@ -22,7 +21,7 @@ public class CTCAE extends Questionario{
 		super(3);
 		// Inizializzazione della map
 		this.data = new HashMap<>();
-		for(String label: this.quests ){
+		for(String label: CTCAE.quests ){
 			this.data.put(label, new Integer(-1));
 		}
 	}
