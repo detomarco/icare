@@ -5,20 +5,20 @@ import java.util.Map;
 import classes.Questionario;
 import util.Out;
 
-public class Analizzatore extends Thread{
-	Questionario quest;
+public class Valutazione extends Thread{
+	private Questionario quest;
 	private String descrizione;
 	private boolean result;
 	
-	public Analizzatore(Questionario quest){
-		super("Analizzatore");
+	public Valutazione(Questionario quest){
+		super("Valutazione");
 		this.quest = quest;
 		descrizione = "";
 		result = true;
 	}
 
 	public void run(){
-		Out.println("L'analizzatore per il questionario " + quest.getClass().getSimpleName() + " si è avviato");
+		Out.println("Il modulo per la valutazione del questionario " + quest.getClass().getSimpleName() + " si è avviato");
 		this.descrizione = valutaQuestionario();
 	}
 	
@@ -39,7 +39,6 @@ public class Analizzatore extends Thread{
         Out.println(messaggio);
 		return messaggio;
 	}
-	
 	
 	public String getDescrizione(){
 		return this.descrizione;

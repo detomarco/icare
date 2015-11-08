@@ -5,7 +5,10 @@ import java.security.SecureRandom;
 import java.util.Date;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import util.Out;
 
 public class Questionario {
 	private String id;
@@ -13,9 +16,7 @@ public class Questionario {
 	protected final int valoreAllarmante;
 	protected Map<String, Integer> data;
 
-	public int getValoreAllarmante() {
-		return valoreAllarmante;
-	}
+	
 
 	public Questionario(int valoreAllarmante) {
 		this.id = this.generateId();
@@ -25,7 +26,9 @@ public class Questionario {
 	public String getId() {
 		return this.id;
 	}
-	
+	public int getValoreAllarmante() {
+		return valoreAllarmante;
+	}
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -38,8 +41,16 @@ public class Questionario {
 		return data;
 	}
 
-	public void putValue(String label, int value){
+	public void put(String label, int value){
 		this.data.put(label, new Integer(value));
+	}
+	
+	public void putArray(int[] value){
+		int i = 0;
+		for(Map.Entry<String,Integer> element: this.data.entrySet()){
+			this.put(element.getKey(), value[i]);
+			i++;
+		}
 	}
 
 	public static String toJSON(Questionario esas, Questionario ctcae){
@@ -47,27 +58,24 @@ public class Questionario {
 		JSONObject esas_json = new JSONObject();
 		JSONObject ctcae_json = new JSONObject();
 
-		esas_json.put("id", esas.getId());
-		esas_json.put("fields", esas.getMap());
-		json.put("esas", esas_json);
+		json.put("esas", esas.toJSON());
 
-		ctcae_json.put("id", ctcae.getId());
-		ctcae_json.put("fields", ctcae.getMap());
-		json.put("ctcae", ctcae_json);
+		json.put("ctcae", ctcae.toJSON());
 
 		return json.toString();
 	}
 	
-	public String toJSON(){
+	public JSONObject toJSON(){
 		JSONObject json = new JSONObject();
-		JSONObject fields = new JSONObject();
+		JSONArray fields = new JSONArray();
 		json.put("id", this.getId());
 		for(Map.Entry<String,Integer> element: this.data.entrySet()){
-			fields.put(element.getKey(), element.getValue());
+			fields.put(element.getValue());
 		}
 		json.put("fields", fields);
+		
 
-		return json.toString();
+		return json;
 	}
 	
 }

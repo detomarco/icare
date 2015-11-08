@@ -10,6 +10,7 @@ public class Out {
 	
 	public static void print(Object o){
 		System.out.print(date.format(new Date()) + " - " + Thread.currentThread().getName() + ": " + o.toString());
+	
 	}
 	
 	public static void println(Object o){

@@ -10,14 +10,15 @@ import util.Messaggio;
 import util.Out;
 
 public class Paziente extends Thread{
-	private Questionario esas;
-	private Questionario ctcae;
-	private Messaggio messaggio;
-	public Paziente(Messaggio messaggio) {
+	private Questionario esas, ctcae;
+	private Messaggio messaggio, notifica;
+	
+	public Paziente(Messaggio messaggio, Messaggio notifica) {
 		super("Paziente");
 		this.esas = new ESAS();
 		this.ctcae = new CTCAE();
 		this.messaggio = messaggio;
+		this.notifica = notifica;
 	}
 	
 	public void run() {
@@ -50,7 +51,7 @@ public class Paziente extends Thread{
 				} while (value < 0 || value > 10);
 				
 				// Inserisci il valore nella map
-				esas.putValue(label, value);
+				esas.put(label, value);
 	        }
 			
 			Out.println("Il questionario ESAS è concluso: passiamo ora a quello CTCAE");
@@ -78,7 +79,7 @@ public class Paziente extends Thread{
 				} while (value < 0 || value > 4);
 				
 				// Inserisci il valore nella map
-				ctcae.putValue(label, value);
+				ctcae.put(label, value);
 	        }
 			
 			Out.println("Il questionario CTCAE è concluso: la compilazione dei questionari si è conclusa.");
@@ -86,21 +87,27 @@ public class Paziente extends Thread{
 		
 			in.close();
 			
+			// Invio dei questionari
+				this.inviaQuestionari(esas, ctcae);
+				
 			// Simulazione di invio dei questionari
 				Out.wait("Invio dei questionari in corso");
-				
-			
+
 				Out.println("Questionario inviato, ti invieremo una notifica appena verrano valutati");
 			
 			Out.div();
 			
-			// Invio dei questionari
-			this.inviaQuestionari(esas, ctcae);
+			// Attendi la notifica
+			riceviNotifica();
 		
 	}
 	
 	public void inviaQuestionari(Questionario esas, Questionario ctcae){
 		this.messaggio.put(Questionario.toJSON(esas, ctcae));
+	}
+	
+	public void riceviNotifica(){
+		Out.println(this.notifica.get());
 	}
 	
 
