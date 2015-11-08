@@ -14,11 +14,7 @@ public class Analizzatore extends Thread{
 		this.quest = quest;
 		result = "";
 	}
-	
-	public String getResult(){
-		return this.result;
-	}
-	
+
 	public void run(){
 		Out.println("L'analizzatore per il questionario " + quest.getClass().getSimpleName() + " si è avviato");
 		this.result = valutaQuestionario();
@@ -26,11 +22,8 @@ public class Analizzatore extends Thread{
 	
 	public String valutaQuestionario(){
 		Out.println("Valutazione del questionario " + quest.getClass().getSimpleName() + " in corso");
-        String attr;
         Integer value;
-        boolean result = true;
         for(Map.Entry<String,Integer> element:quest.getMap().entrySet()){
-            attr = element.getKey();
             value = (int)element.getValue();
             if(value >= quest.getValoreAllarmante()){
             	String messaggio = "Il questionario " + quest.getClass().getSimpleName() + " è allarmante. ";
@@ -40,6 +33,11 @@ public class Analizzatore extends Thread{
         }
         
 		return "";
+	}
+	
+	
+	public String getResult(){
+		return this.result;
 	}
 
 }

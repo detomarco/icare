@@ -10,11 +10,12 @@ public class ILM extends Thread{
 	
 	Messaggio messaggio;
 	public ILM() {
+		super("ILM");
 		this.messaggio = new Messaggio();
 	}
 
 	public void run() {
-
+		Out.println("L'interfaccia lato medico si è avviata");
 		
 
 	}

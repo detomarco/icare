@@ -87,7 +87,7 @@ public class Paziente extends Thread{
 			in.close();
 			
 			// Simulazione di invio dei questionari
-				Out.wait("Invio dei questionari in corso");
+				Out.wait("Invio dei questionari in corso.......");
 				
 			
 				Out.println("Questionario inviato, ti invieremo una notifica appena verrano valutati\n");

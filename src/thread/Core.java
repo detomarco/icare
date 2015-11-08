@@ -26,7 +26,13 @@ public class Core extends Thread{
 	}
 	
 	public static void main(String[] args) {
-		new Core();
+		Core core = new Core();
+		try {
+			core.join();
+		} catch (InterruptedException e) { }
+		System.out.println("------------------");
+		System.out.println("Fine simulazione");
+		System.out.println("------------------");
 	}
 	
 	public void run() {
@@ -42,12 +48,9 @@ public class Core extends Thread{
 		// Avvio dell'interfaccia lato paziente
 			ILP ilp = new ILP();
 			ilp.start();
-		try {
-			// Aspetta che l'ILP termini la sua esecuzione
-			ilp.join();
-		} catch (InterruptedException e) { }
 		
-		// Ricezione dei questionari in formato json
+	
+		// Attendi la ricezione del questionario
 		String questionario = ilp.riceviQuestionario();
 		
 		// Gestione della stringa json per l'istanziazzione dei due oggetti questionari
@@ -87,8 +90,8 @@ public class Core extends Thread{
 				analizzatore_esas.join();
 				analizzatore_ctcae.join();
 		} catch (InterruptedException e) { }
-	
 		
+		System.out.println("");
 		// Recupero del risultato delle analisi, con relativa descrizione in caso di criticità
 			String result_esas = analizzatore_esas.getResult();
 			String result_ctcae = analizzatore_ctcae.getResult();
@@ -96,12 +99,17 @@ public class Core extends Thread{
 		// Generazione della descrizione dei risultati
 		String descrizione = result_esas + result_ctcae;
 		
+		// Avvio dell'interfaccia al database
+			IDB idb = new IDB(questionario);
+			idb.start();
+		
+		
 		// Se è presente una descrizione, allora è stata rilevata una criticità
 		if(!descrizione.equals("")){
 			// Allarmare il medico
 				Out.println("Situazione del paziente allarmante.");
-				Out.wait("Invio dell'alert all'interfaccia lato medico in corso");
-				// Creazione dell'oggetto alert
+				Out.wait("Invio dell'alert all'interfaccia lato medico in corso.......");
+			// Creazione dell'oggetto alert
 				Alert alert = new Alert(questionario, descrizione);
 				ilm.inviaAlert(alert);
 		}else{

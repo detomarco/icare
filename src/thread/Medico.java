@@ -21,7 +21,7 @@ public class Medico extends Thread{
 	public void analizzaQuestionari(){
 		String questionario = this.messaggio.get();
 		JSONObject json = new JSONObject(questionario);
-		Out.wait("Analisi dei risultati in corso...");
+		Out.wait("Analisi dei risultati in corso.......");
 		Out.print("I risultati dicono che: " + json.get("descrizione").toString());
 	}
 	

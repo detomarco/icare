@@ -8,20 +8,13 @@ public class ILP extends Thread{
 	
 	public ILP() {
 		super("ILP");
+		messaggio = new Messaggio();
 	}
 	
 	public void run() {
 		Out.println("L'interfaccia lato paziente si è avviata");
-		messaggio = new Messaggio();
-		
 		Paziente paziente = new Paziente(messaggio);
 		paziente.start();
-		
-		try {
-			// Attendi il completamento della compilazione dei questionari
-			paziente.join();
-		} catch (InterruptedException e) {}
-		
 		
 	}
 

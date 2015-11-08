@@ -16,12 +16,10 @@ public class Out {
 	}
 	
 	public static void wait(Object o){
-		Out.print(o.toString());
-		for(int i=0; i <= 10; i++){
-			try { Thread.sleep(10); } catch (InterruptedException e) { }
-			if(i != 10){ System.out.print(".");
-			}else{ System.out.println(".");}
-		}
+		Out.println(o.toString());
+		try { Thread.sleep(1000); } catch (InterruptedException e) { }
+
+		
 	}
 	
 }
