@@ -14,7 +14,6 @@ public class Medico extends Thread{
 	}
 	
 	public void run() {
-		
 		analizzaQuestionari();
 	}
 	
@@ -22,12 +21,12 @@ public class Medico extends Thread{
 		
 		String questionario = this.messaggio.get();
 		JSONObject json = new JSONObject(questionario);
-		Out.div();
+		
 		Out.wait("Analisi dei risultati in corso");
 		Out.println("I risultati dicono che: " + json.get("descrizione").toString());
 		Out.wait("Consultazione approfondita dei questionari");
 		Out.println("Presa dei dovuti provvedimenti");
-		Out.div();
+		
 	}
 	
 

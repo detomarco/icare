@@ -45,6 +45,8 @@ public class Valutazione extends Thread{
 					valutazione_esas.join();
 					valutazione_ctcae.join();
 			} catch (InterruptedException e) { }
+			
+		Out.println("Analisi dei questionari terminata");
 		// Restituzione dei risultati
 		return valutazione_esas.getRisultato() + valutazione_ctcae.getRisultato();
 		

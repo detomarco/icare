@@ -25,12 +25,12 @@ public class Paziente extends Thread{
 		
 		Scanner in = new Scanner(System.in);
 		Out.println("Ciao Walter, è arrivato il momento di compilare i nuovi questionari.");
-		Out.println("Premi invio per iniziare");
+		Out.print("Premi invio per iniziare");
 		in.nextLine();
 		
 		/* QUESTIONARIO ESAS */
 			Out.div();
-			Out.println("Questionario ESAS: indica la gravità del sintomo con dei numeri che vanno da 0 a 10");
+			Out.println("Questionario ESAS: indica la gravità del sintomo con dei valori che vanno da 0 a 10\n");
 			
 			// Per ogni domanda del questionario ESAS
 			for(Map.Entry<String,Integer> element:esas.getMap().entrySet()){
@@ -58,7 +58,7 @@ public class Paziente extends Thread{
 			
 		/* QUESTIONARIO CTCAE */
 			Out.div();
-			Out.println("Questionario CTCAE: indica la gravità del sintomo con dei numeri che vanno da 0 a 4\n");
+			Out.println("Questionario CTCAE: indica la gravità del sintomo con dei valori che vanno da 0 a 4\n");
 			
 			// Per ogni domanda del questionario CTCAE
 			for(Map.Entry<String,Integer> element:ctcae.getMap().entrySet()){
@@ -86,18 +86,14 @@ public class Paziente extends Thread{
 			Out.div();
 		
 			in.close();
+			// Simulazione di invio dei questionari
+			Out.wait("Invio dei questionari in corso");
 			
 			// Invio dei questionari
 				this.inviaQuestionari(esas, ctcae);
-				
-			// Simulazione di invio dei questionari
-				Out.wait("Invio dei questionari in corso");
-
 				Out.println("Questionario inviato, ti invieremo una notifica appena verrano valutati");
 			
-			Out.div();
-			
-			// Attendi la notifica
+			// Attendi la rinotifica
 			riceviNotifica();
 		
 	}

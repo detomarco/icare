@@ -14,8 +14,6 @@ public class Questionario {
 	protected final int valoreAllarmante;
 	protected Map<String, Integer> data;
 
-	
-
 	public Questionario(int valoreAllarmante) {
 		this.id = this.generateId();
 		this.valoreAllarmante = valoreAllarmante;

@@ -17,14 +17,12 @@ import classes.Questionario;
 import util.Out;
 
 public class Core extends Thread{
-	
 	public Core() {
 		super("Core");
 	}
 	
 	public static void main(String[] args) {
 		new Core().start();
-	
 	}
 	
 	public void run() {
@@ -33,11 +31,10 @@ public class Core extends Thread{
 	}
 	
 	public void gestioneQuestionario(){
-		
 		// Avvio dell'interfaccia lato paziente
-			ILP ilp = new ILP();
-			ilp.start();
-
+		ILP ilp = new ILP();
+		ilp.start();
+		
 		// Attendi la ricezione del questionario
 		String questionario = ilp.riceviQuestionario();
 		
@@ -63,23 +60,25 @@ public class Core extends Thread{
 				}
 				ctcae.putArray(ctcae_fields);
 				ctcae.setId(json.getJSONObject("esas").get("id").toString());
-			
+		
+		// Valutazione dei questionari
 		String descrizione = Valutazione.valutaQuestionario(esas, ctcae);
-		Out.println("Analisi dei questionari terminata");
-		Out.div();
+
 
 		// Avvio dell'interfaccia al database
 			IDB idb = new IDB(questionario, descrizione);
 			idb.start();
 			
-		// Se è presente una descrizione, allora è stata rilevata una criticità
+		// Se un questionario risulta allarmante
 		if(descrizione.indexOf("allarmante") >= 0){
-			// Allarmare il medico
-				Out.println("Condizione del paziente allarmante.");
+			// Inviare alert al medico
+				Out.println("Condizione del paziente allarmante. ");
 				Alert alert = new Alert(questionario, descrizione);
 			// Avvio dell'interfaccia lato medico
 				ILM ilm = new ILM(alert);
 				ilm.start();
+			// Ferma il thread di ilp, in modo tale da non fargli attendere la notifica
+			ilp.interrupt();
 			
 		}else{
 			

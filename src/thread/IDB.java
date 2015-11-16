@@ -24,6 +24,7 @@ public class IDB extends Thread{
 	public void salvaRisultati(String questionario, String descrizione){
 		
 		JSONObject json = new JSONObject(questionario);
+		// Inserimento della descrizione nella stringa da elaborare ed inserire nel db
 		json.put("descrizione", descrizione);
 		
 		Out.println("Elaborazione ed inserimento del seguente risultato: " + json.toString());

@@ -16,12 +16,12 @@ public class ILP extends Thread{
 	public void run() {
 		Out.println("L'interfaccia lato paziente si è avviata");
 		// Simulazione della compilazione di un questionario 
-		// 	(in realtà questo thread viene svolto nell'app del paziente)
+		// 	(in realtà questo thread viene eseguito nell'app del paziente)
 		Paziente paziente = new Paziente(messaggio, notifica);
 		paziente.start();
 		
 	}
-
+	
 	public String riceviQuestionario(){
 		return messaggio.get().toString();
 	}
@@ -29,4 +29,6 @@ public class ILP extends Thread{
 	public void inviaNotifica(String descrizione){
 		notifica.put(descrizione);
 	}
+
+	
 }
